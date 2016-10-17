@@ -1,0 +1,14 @@
+Overview = Overview
+
+	Name = Name
+	Breed = Description
+
+Gender = Status
+	Options are 
+		In stock
+		Out of stock
+		On order
+
+Measurement = Quantity
+
+	Weight = Quantity (number in stock)
