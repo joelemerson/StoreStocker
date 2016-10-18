@@ -11,7 +11,7 @@ Pre-requisites
 - Android Build Tools v23.0.3
 - Android Support Repository v24.1.1
 
-Getting Started
+Getting Started....
 ---------------
 
 This sample uses the Gradle build system. To build this project, use the
