@@ -145,6 +145,13 @@ public final class ItemContract {
             }
             return false;
         }
+
+        /**
+         * Name of the manufacturer_label.
+         * <p>
+         * Type: TEXT
+         */
+        public final static String COLUMN_ITEM_MANUFACTURER = "MANUFACTURER";
     }
 
 }

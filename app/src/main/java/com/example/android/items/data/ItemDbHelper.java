@@ -60,6 +60,7 @@ public class ItemDbHelper extends SQLiteOpenHelper {
                 + ItemEntry.COLUMN_ITEM_STATUS + " INTEGER NOT NULL, "
                 + ItemEntry.COLUMN_ITEM_QUANTITY + " INTEGER NOT NULL DEFAULT 0,"
                 + ItemEntry.COLUMN_ITEM_IMAGE + " TEXT, "
+                + ItemEntry.COLUMN_ITEM_MANUFACTURER + " TEXT, "
                 + ItemEntry.COLUMN_ITEM_PRICE + " FLOAT NOT NULL DEFAULT 0.00);";
         // Execute the SQL statement
         db.execSQL(SQL_CREATE_ITEMS_TABLE);

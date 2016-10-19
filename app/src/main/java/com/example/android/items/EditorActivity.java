@@ -85,6 +85,11 @@ public class EditorActivity extends AppCompatActivity implements
     private EditText mImageEditText;
 
     /**
+     * EditText field to enter the item's manufacturer
+     */
+    private EditText mManufacturerEditText;
+
+    /**
      * EditText field to enter the item's status
      */
     private Spinner mStatusSpinner;
@@ -142,6 +147,7 @@ public class EditorActivity extends AppCompatActivity implements
         mQuantityEditText = (EditText) findViewById(R.id.edit_item_quantity);
         mStatusSpinner = (Spinner) findViewById(R.id.spinner_status);
         mPriceEditText = (EditText) findViewById(R.id.edit_item_price);
+        mManufacturerEditText = (EditText) findViewById(R.id.edit_item_manufacturer);
         mImageEditText = (EditText) findViewById(R.id.edit_item_image);
         // Setup OnTouchListeners on all the input fields, so we can determine if the user
         // has touched or modified them. This will let us know if there are unsaved changes
@@ -150,6 +156,7 @@ public class EditorActivity extends AppCompatActivity implements
         mDescriptionEditText.setOnTouchListener(mTouchListener);
         mQuantityEditText.setOnTouchListener(mTouchListener);
         mPriceEditText.setOnTouchListener(mTouchListener);
+        mManufacturerEditText.setOnTouchListener(mTouchListener);
         mImageEditText.setOnTouchListener(mTouchListener);
         mStatusSpinner.setOnTouchListener(mTouchListener);
         setupSpinner();
@@ -198,16 +205,10 @@ public class EditorActivity extends AppCompatActivity implements
         // Read from input fields
         // Use trim to eliminate leading or trailing white space
         String nameString = mNameEditText.getText().toString().trim();
-
-        // Is the name valid?  Then notify user they must enter a name
-        if (!TextUtils.isEmpty(nameString)) {
-            Toast.makeText(this, getString(R.string.nameRequired),
-                    Toast.LENGTH_SHORT).show();
-        }
-
         String descriptionString = mDescriptionEditText.getText().toString().trim();
         String quantityString = mQuantityEditText.getText().toString().trim();
         String priceString = mPriceEditText.getText().toString().trim();
+        String manufacturerString = mManufacturerEditText.getText().toString().trim();
         String imageString = mImageEditText.getText().toString().trim();
         // Check if this is supposed to be a new item
         // and check if all the fields in the editor are blank
@@ -216,6 +217,7 @@ public class EditorActivity extends AppCompatActivity implements
                 TextUtils.isEmpty(descriptionString) &&
                 TextUtils.isEmpty(quantityString) &&
                 TextUtils.isEmpty(priceString) &&
+                TextUtils.isEmpty(manufacturerString) &&
                 TextUtils.isEmpty(imageString) &&
                 mStatus == ItemEntry.STATUS_IN_STOCK) {
             // Since no fields were modified, we can return early without creating a new item.
@@ -229,7 +231,15 @@ public class EditorActivity extends AppCompatActivity implements
         values.put(ItemContract.ItemEntry.COLUMN_ITEM_DESCRIPTION, descriptionString);
         values.put(ItemContract.ItemEntry.COLUMN_ITEM_STATUS, mStatus);
         values.put(ItemContract.ItemEntry.COLUMN_ITEM_PRICE, priceString);
+        values.put(ItemContract.ItemEntry.COLUMN_ITEM_MANUFACTURER, manufacturerString);
         values.put(ItemContract.ItemEntry.COLUMN_ITEM_IMAGE, imageString);
+
+        // Is the name valid?  Then notify user they must enter a name
+        if (TextUtils.isEmpty(nameString)) {
+            Toast.makeText(this, getString(R.string.nameRequired),
+                    Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         // If the quantity is not provided by the user, don't try to parse the string into an
         // integer value. Use 0 by default.
@@ -373,6 +383,7 @@ public class EditorActivity extends AppCompatActivity implements
                 ItemContract.ItemEntry.COLUMN_ITEM_DESCRIPTION,
                 ItemEntry.COLUMN_ITEM_STATUS,
                 ItemContract.ItemEntry.COLUMN_ITEM_QUANTITY,
+                ItemEntry.COLUMN_ITEM_MANUFACTURER,
                 ItemEntry.COLUMN_ITEM_IMAGE,
                 ItemEntry.COLUMN_ITEM_PRICE};
         // This loader will execute the ContentProvider's query method on a background thread
@@ -399,6 +410,7 @@ public class EditorActivity extends AppCompatActivity implements
             int statusColumnIndex = cursor.getColumnIndex(ItemContract.ItemEntry.COLUMN_ITEM_STATUS);
             int quantityColumnIndex = cursor.getColumnIndex(ItemEntry.COLUMN_ITEM_QUANTITY);
             int priceColumnIndex = cursor.getColumnIndex(ItemEntry.COLUMN_ITEM_PRICE);
+            int manufacturerColumnIndex = cursor.getColumnIndex(ItemEntry.COLUMN_ITEM_MANUFACTURER);
             int imageColumnIndex = cursor.getColumnIndex(ItemEntry.COLUMN_ITEM_IMAGE);
             // Extract out the value from the Cursor for the given column index
             String name = cursor.getString(nameColumnIndex);
@@ -406,12 +418,14 @@ public class EditorActivity extends AppCompatActivity implements
             int status = cursor.getInt(statusColumnIndex);
             int quantity = cursor.getInt(quantityColumnIndex);
             float price = cursor.getFloat(priceColumnIndex);
+            String manufacturer = cursor.getString(manufacturerColumnIndex);
             String image = cursor.getString(imageColumnIndex);
             // Update the views on the screen with the values from the database
             mNameEditText.setText(name);
             mDescriptionEditText.setText(description);
             mQuantityEditText.setText(Integer.toString(quantity));
             mPriceEditText.setText("$" +(price));
+            mManufacturerEditText.setText(manufacturer);
             mImageEditText.setText(image);
 
             // Status is a dropdown spinner, so map the constant value from the database
@@ -439,6 +453,7 @@ public class EditorActivity extends AppCompatActivity implements
         mQuantityEditText.setText("");
         mPriceEditText.setText("");
         mImageEditText.setText("");
+        mManufacturerEditText.setText("");
         mStatusSpinner.setSelection(0);
     }
 

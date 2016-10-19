@@ -104,9 +104,9 @@
     <!-- Label for dropdown menu option if the item is on order [CHAR LIMIT=20] -->
     <string name="status_on_order">On Order</string>
 
-    <!-- REMOVE THIS LATER [CHAR LIMIT=20] -->
     <string name="unknown_description">Unknown description</string>
     <string name="price">Price</string>
     <string name="image_label">Image</string>
     <string name="nameRequired">Name is required.</string>
+    <string name="manufacturer_label">Manufacturer</string>
 </resources>
