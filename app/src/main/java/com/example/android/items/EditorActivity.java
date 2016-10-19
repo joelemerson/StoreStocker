@@ -205,6 +205,11 @@ public class EditorActivity extends AppCompatActivity implements
         // Read from input fields
         // Use trim to eliminate leading or trailing white space
         String nameString = mNameEditText.getText().toString().trim();
+        // Is the name valid?  Then notify user they must enter a name
+        if (TextUtils.isEmpty(nameString)) {
+            Toast.makeText(this, getString(R.string.nameRequired),
+                    Toast.LENGTH_SHORT).show();
+        }
         String descriptionString = mDescriptionEditText.getText().toString().trim();
         String quantityString = mQuantityEditText.getText().toString().trim();
         String priceString = mPriceEditText.getText().toString().trim();
@@ -233,13 +238,6 @@ public class EditorActivity extends AppCompatActivity implements
         values.put(ItemContract.ItemEntry.COLUMN_ITEM_PRICE, priceString);
         values.put(ItemContract.ItemEntry.COLUMN_ITEM_MANUFACTURER, manufacturerString);
         values.put(ItemContract.ItemEntry.COLUMN_ITEM_IMAGE, imageString);
-
-        // Is the name valid?  Then notify user they must enter a name
-        if (TextUtils.isEmpty(nameString)) {
-            Toast.makeText(this, getString(R.string.nameRequired),
-                    Toast.LENGTH_SHORT).show();
-            return;
-        }
 
         // If the quantity is not provided by the user, don't try to parse the string into an
         // integer value. Use 0 by default.

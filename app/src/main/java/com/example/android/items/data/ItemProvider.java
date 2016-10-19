@@ -22,8 +22,10 @@ package com.example.android.items.data;
         import android.database.Cursor;
         import android.database.sqlite.SQLiteDatabase;
         import android.net.Uri;
+        import android.text.TextUtils;
         import android.util.Log;
-
+        import android.widget.Toast;
+        import com.example.android.items.R;
         import com.example.android.items.data.ItemContract.ItemEntry;
 
 /**
@@ -139,21 +141,21 @@ public class ItemProvider extends ContentProvider {
      */
     private Uri insertItem(Uri uri, ContentValues values) {
         // Check that the name is not null
-        // String name = values.getAsString(ItemEntry.COLUMN_ITEM_NAME);
-        //if (name.isEmpty()) {
-        //    throw new IllegalArgumentException("Item requires a name");
-        //}
+        String name = values.getAsString(ItemEntry.COLUMN_ITEM_NAME);
+        if (name.isEmpty()) {
+            throw new IllegalArgumentException("Item requires a name");
+        }
 
         // Check that the status is valid
-        //Integer status = values.getAsInteger(ItemContract.ItemEntry.COLUMN_ITEM_STATUS);
-        //if (status == null || !ItemContract.ItemEntry.isValidStatus(status)) {
-        //    throw new IllegalArgumentException("Item requires valid status");
-        //}
-        // If the quantity is provided, check that it's greater than or equal to 0
-        //Integer quantity = values.getAsInteger(ItemContract.ItemEntry.COLUMN_ITEM_QUANTITY);
-        //if (quantity != null && quantity < 0) {
-        //    throw new IllegalArgumentException("Item requires valid quantity");
-        //}
+        Integer status = values.getAsInteger(ItemContract.ItemEntry.COLUMN_ITEM_STATUS);
+        if (status == null || !ItemContract.ItemEntry.isValidStatus(status)) {
+            throw new IllegalArgumentException("Item requires valid status");
+        }
+        //If the quantity is provided, check that it's greater than or equal to 0
+        Integer quantity = values.getAsInteger(ItemContract.ItemEntry.COLUMN_ITEM_QUANTITY);
+        if (quantity != null && quantity < 0) {
+            throw new IllegalArgumentException("Item requires valid quantity");
+        }
 
         // No need to check the description, any value is valid (including null).
         // Get writeable database
