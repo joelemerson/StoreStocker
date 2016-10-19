@@ -108,4 +108,5 @@
     <string name="unknown_description">Unknown description</string>
     <string name="price">Price</string>
     <string name="image_label">Image</string>
+    <string name="nameRequired">Name is required.</string>
 </resources>
