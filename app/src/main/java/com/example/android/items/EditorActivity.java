@@ -209,6 +209,7 @@ public class EditorActivity extends AppCompatActivity implements
         if (TextUtils.isEmpty(nameString)) {
             Toast.makeText(this, getString(R.string.nameRequired),
                     Toast.LENGTH_SHORT).show();
+            return;
         }
         String descriptionString = mDescriptionEditText.getText().toString().trim();
         String quantityString = mQuantityEditText.getText().toString().trim();

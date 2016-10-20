@@ -15,23 +15,30 @@
  */
 package com.example.android.items;
 
+import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.net.Uri;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CursorAdapter;
 import android.widget.TextView;
 
+import com.example.android.items.data.ItemContract;
 import com.example.android.items.data.ItemContract.ItemEntry;
 
 import java.text.NumberFormat;
 
+import static android.R.attr.id;
+
 /**
  * {@link ItemCursorAdapter} is an adapter for a list or grid view
- * that uses a {@link Cursor} of pet data as its data source. This adapter knows
- * how to create list items for each row of pet data in the {@link Cursor}.
+ * that uses a {@link Cursor} of items data as its data source. This adapter knows
+ * how to create list items for each row of items in the {@link Cursor}.
  */
 public class ItemCursorAdapter extends CursorAdapter {
 
@@ -71,7 +78,11 @@ public class ItemCursorAdapter extends CursorAdapter {
      *                correct row.
      */
     @Override
-    public void bindView(View view, Context context, Cursor cursor) {
+    public void bindView(View view, final Context context, final Cursor cursor) {
+
+        final int itemId = cursor.getInt(cursor.getColumnIndexOrThrow(ItemEntry._ID));
+        final int itemQty = cursor.getInt(cursor.getColumnIndex(ItemEntry.COLUMN_ITEM_QUANTITY));
+
         // Find individual views that we want to modify in the list item layout
         TextView nameTextView = (TextView) view.findViewById(R.id.name);
         TextView descriptionTextView = (TextView) view.findViewById(R.id.description);
@@ -101,5 +112,25 @@ public class ItemCursorAdapter extends CursorAdapter {
         descriptionTextView.setText(itemDescription);
         priceTextView.setText("$" + (itemPrice));
         quantityTextView.setText(itemQuantity);
+
+        //Process a sale when the button is clicked and subtract one from the current inventory
+
+        Button saleButton = (Button) view.findViewById(R.id.salebutton);
+        saleButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                ContentValues values=new ContentValues();
+
+                if (itemQty > 0) {
+                    //itemQty--;
+                    values.put(ItemContract.ItemEntry.COLUMN_ITEM_QUANTITY, itemQty);
+                    Uri uri = ContentUris.withAppendedId(ItemContract.ItemEntry.CONTENT_URI, itemId);
+                    context.getContentResolver().update(uri, values, null, null);
+                }
+
+                context.getContentResolver().notifyChange(ItemContract.ItemEntry.CONTENT_URI, null);
+            }
+        });}
     }
-}
+
