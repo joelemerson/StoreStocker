@@ -201,16 +201,10 @@ public class EditorActivity extends AppCompatActivity implements
     /**
      * Get user input from editor and save item into database locally.
      */
-    private boolean saveItem() {
+    private void saveItem() {
         // Read from input fields
         // Use trim to eliminate leading or trailing white space
         String nameString = mNameEditText.getText().toString().trim();
-        // Is the name valid?  Then notify user they must enter a name
-        if (TextUtils.isEmpty(nameString)) {
-            Toast.makeText(this, getString(R.string.nameRequired),
-                    Toast.LENGTH_SHORT).show();
-            return false;
-        }
         String descriptionString = mDescriptionEditText.getText().toString().trim();
         String quantityString = mQuantityEditText.getText().toString().trim();
         String priceString = mPriceEditText.getText().toString().trim();
@@ -228,7 +222,7 @@ public class EditorActivity extends AppCompatActivity implements
                 mStatus == ItemEntry.STATUS_IN_STOCK) {
             // Since no fields were modified, we can return early without creating a new item.
             // No need to create ContentValues and no need to do any ContentProvider operations.
-            return true;
+            return;
         }
         // Create a ContentValues object where column names are the keys,
         // and item attributes from the editor are the values.
@@ -248,6 +242,13 @@ public class EditorActivity extends AppCompatActivity implements
         }
         values.put(ItemContract.ItemEntry.COLUMN_ITEM_QUANTITY, quantity);
 
+        // If the price is not provided by the user, don't try to parse the string into an
+        // integer value. Use 0 by default.
+        float price = 0;
+        if (!TextUtils.isEmpty(priceString)) {
+            price = Float.parseFloat(priceString);
+        }
+        values.put(ItemContract.ItemEntry.COLUMN_ITEM_PRICE, price);
 
         // Determine if this is a new or existing item by checking if mCurrentItemUri is null or not
         if (mCurrentItemUri == null) {
@@ -281,7 +282,7 @@ public class EditorActivity extends AppCompatActivity implements
                         Toast.LENGTH_SHORT).show();
             }
         }
-        return true;
+        return;
     }
 
     @Override
@@ -311,13 +312,23 @@ public class EditorActivity extends AppCompatActivity implements
     public boolean onOptionsItemSelected(MenuItem item) {
         // User clicked on a menu option in the app bar overflow menu
         switch (item.getItemId()) {
+
             // Respond to a click on the "Save" menu option
             case R.id.action_save:
-                // Save item to database
+
+                // First validate data...
+                String nameString = mNameEditText.getText().toString().trim();
+                // Is the name valid?  Then notify user they must enter a name
+                if (TextUtils.isEmpty(nameString)) {
+                    Toast.makeText(this, getString(R.string.nameRequired),
+                            Toast.LENGTH_SHORT).show();
+                return false;}
+
+                //then save the data
                 saveItem();
-                // Exit activity
                 finish();
                 return true;
+
             // Respond to a click on the "Delete" menu option
             case R.id.action_delete:
                 // Pop up confirmation dialog for deletion
@@ -417,14 +428,14 @@ public class EditorActivity extends AppCompatActivity implements
             String description = cursor.getString(descriptionColumnIndex);
             int status = cursor.getInt(statusColumnIndex);
             int quantity = cursor.getInt(quantityColumnIndex);
-            float price = cursor.getFloat(priceColumnIndex);
+            Float price = cursor.getFloat(priceColumnIndex);
             String manufacturer = cursor.getString(manufacturerColumnIndex);
             String image = cursor.getString(imageColumnIndex);
             // Update the views on the screen with the values from the database
             mNameEditText.setText(name);
             mDescriptionEditText.setText(description);
             mQuantityEditText.setText(Integer.toString(quantity));
-            mPriceEditText.setText("$" +(price));
+            mPriceEditText.setText(Float.toString(price));
             mManufacturerEditText.setText(manufacturer);
             mImageEditText.setText(image);
 

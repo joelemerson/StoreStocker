@@ -110,7 +110,7 @@ public class ItemCursorAdapter extends CursorAdapter {
         // Update the TextViews with the attributes for the current item
         nameTextView.setText(itemName);
         descriptionTextView.setText(itemDescription);
-        priceTextView.setText("$" + (itemPrice));
+        priceTextView.setText(itemPrice);
         quantityTextView.setText(itemQuantity);
 
         //Process a sale when the button is clicked and subtract one from the current inventory
