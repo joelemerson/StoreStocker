@@ -42,7 +42,17 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:fontFamily="sans-serif"
-        android:text="$4.00"
+        android:text="4.00"
+        android:textAppearance="?android:textAppearanceSmall"
+        android:textColor="#AEB6BD"/>
+
+    <TextView
+        android:id="@+id/price_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@id/price"
+        android:fontFamily="sans-serif"
+        android:text="@string/price_text"
         android:textAppearance="?android:textAppearanceSmall"
         android:textColor="#AEB6BD"/>
 
@@ -54,6 +64,17 @@
         android:layout_below="@id/price"
         android:fontFamily="sans-serif"
         android:text="100"
+        android:textAppearance="?android:textAppearanceSmall"
+        android:textColor="#AEB6BD"/>
+
+    <TextView
+        android:id="@+id/quantity_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@id/quantity"
+        android:layout_below="@id/price"
+        android:fontFamily="sans-serif"
+        android:text="Quantity: "
         android:textAppearance="?android:textAppearanceSmall"
         android:textColor="#AEB6BD"/>
 

@@ -109,4 +109,5 @@
     <string name="image_label">Image</string>
     <string name="nameRequired">Name is required.</string>
     <string name="manufacturer_label">Manufacturer</string>
+    <string name="price_text">Price: $</string>
 </resources>
