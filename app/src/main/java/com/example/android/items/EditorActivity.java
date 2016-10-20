@@ -199,7 +199,7 @@ public class EditorActivity extends AppCompatActivity implements
     }
 
     /**
-     * Get user input from editor and save item into database.
+     * Get user input from editor and save item into database locally.
      */
     private boolean saveItem() {
         // Read from input fields
