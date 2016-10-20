@@ -164,6 +164,7 @@ public class EditorActivity extends AppCompatActivity implements
         mImageEditText.setOnTouchListener(mTouchListener);
         mStatusSpinner.setOnTouchListener(mTouchListener);
         setupSpinner();
+
         //Implement the Sale Button
         //Set the onClickListener
         Button saleButton = (Button) findViewById(R.id.saleButtonEditor);
@@ -186,6 +187,30 @@ public class EditorActivity extends AppCompatActivity implements
             }
 
         });
+
+        //Implement the Receive Product Button
+        //Set the onClickListener
+        Button receiveButton = (Button) findViewById(R.id.receiveButtonEditor);
+        receiveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Get the current quantity, if more than 0, decrement for on unit sold and update the textview
+                int quantity = Integer.parseInt(mQuantityEditText.getText().toString());
+                if (quantity > 0) {
+                    quantity++;
+                    String quantityString = Integer.toString(quantity);
+                    ContentValues values = new ContentValues();
+                    values.put(ItemContract.ItemEntry.COLUMN_ITEM_QUANTITY, quantity);
+                    //update text view with new quantity
+                    int rowsAffected = getContentResolver().update(mCurrentItemUri, values, null, null);
+                    if (rowsAffected != 0) {
+                        mQuantityEditText.setText(quantityString);
+                    }
+                }
+            }
+
+        });
+
     }
 
     /**
