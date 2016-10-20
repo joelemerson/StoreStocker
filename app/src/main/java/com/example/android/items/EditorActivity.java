@@ -201,7 +201,7 @@ public class EditorActivity extends AppCompatActivity implements
     /**
      * Get user input from editor and save item into database.
      */
-    private void saveItem() {
+    private boolean saveItem() {
         // Read from input fields
         // Use trim to eliminate leading or trailing white space
         String nameString = mNameEditText.getText().toString().trim();
@@ -209,7 +209,7 @@ public class EditorActivity extends AppCompatActivity implements
         if (TextUtils.isEmpty(nameString)) {
             Toast.makeText(this, getString(R.string.nameRequired),
                     Toast.LENGTH_SHORT).show();
-            return;
+            return false;
         }
         String descriptionString = mDescriptionEditText.getText().toString().trim();
         String quantityString = mQuantityEditText.getText().toString().trim();
@@ -228,7 +228,7 @@ public class EditorActivity extends AppCompatActivity implements
                 mStatus == ItemEntry.STATUS_IN_STOCK) {
             // Since no fields were modified, we can return early without creating a new item.
             // No need to create ContentValues and no need to do any ContentProvider operations.
-            return;
+            return true;
         }
         // Create a ContentValues object where column names are the keys,
         // and item attributes from the editor are the values.
@@ -281,6 +281,7 @@ public class EditorActivity extends AppCompatActivity implements
                         Toast.LENGTH_SHORT).show();
             }
         }
+        return true;
     }
 
     @Override
