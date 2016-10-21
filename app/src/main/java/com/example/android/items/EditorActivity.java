@@ -79,6 +79,11 @@ public class EditorActivity extends AppCompatActivity implements
     private Uri mCurrentItemUri;
 
     /**
+     * Content URI for the image item(null if it's a new item)
+     */
+    private Uri mCurrentImageUri;
+
+    /**
      * EditText field to enter the item's name
      */
     private EditText mNameEditText;
@@ -125,12 +130,7 @@ public class EditorActivity extends AppCompatActivity implements
      */
     private int mStatus = ItemEntry.STATUS_IN_STOCK;
 
-    /**
-     * set quantity variable for use in buttonSaleEditor processing
-     */
-    private int mQuantity;
-
-    /**
+     /**
      * Boolean flag that keeps track of whether the item has been edited (true) or not (false)
      */
     private boolean mItemHasChanged = false;
@@ -170,6 +170,7 @@ public class EditorActivity extends AppCompatActivity implements
             // and display the current values in the editor
             getLoaderManager().initLoader(EXISTING_ITEM_LOADER, null, this);
         }
+
         // Find all relevant views that we will need to read user input from
         mNameEditText = (EditText) findViewById(R.id.edit_item_name);
         mDescriptionEditText = (EditText) findViewById(R.id.edit_item_description);
@@ -313,10 +314,10 @@ public class EditorActivity extends AppCompatActivity implements
             // provided to this method as a parameter.  Pull that uri using "resultData.getData()"
 
             if (resultData != null) {
-                mCurrentItemUri = resultData.getData();
-                Log.i(LOG_TAG, "Uri: " + mCurrentItemUri.toString());
-                mImageEditText.setText(mCurrentItemUri.toString());
-                mImageView.setImageBitmap(getBitmapFromUri(mCurrentItemUri));
+                mCurrentImageUri = resultData.getData();
+                Log.i(LOG_TAG, "Uri: " + mCurrentImageUri.toString());
+                mImageEditText.setText(mCurrentImageUri.toString());
+                mImageView.setImageBitmap(getBitmapFromUri(mCurrentImageUri));
             }
         }
     }
