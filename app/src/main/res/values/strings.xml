@@ -10,7 +10,7 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<resources>
+<resources xmlns:xliff="http://schemas.android.com/tools">
     <!-- Name for the application [CHAR LIMIT=12] -->
     <string name="app_name">Store Stocker</string>
 
@@ -110,4 +110,7 @@
     <string name="nameRequired">Name is required.</string>
     <string name="manufacturer_label">Manufacturer</string>
     <string name="price_text">Price: $</string>
+    <string name="email_subject">Product Order: <xliff:g>%s</xliff:g></string>
+
+    <string name="email_subject_text">"Order Product: "</string>
 </resources>

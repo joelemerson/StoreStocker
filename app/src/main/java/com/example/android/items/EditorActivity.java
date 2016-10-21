@@ -15,6 +15,7 @@
  */
 package com.example.android.items;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.LoaderManager;
 import android.content.ContentValues;
@@ -23,11 +24,19 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.ParcelFileDescriptor;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.NavUtils;
+import android.support.v4.app.ShareCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -36,11 +45,17 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
-
 import com.example.android.items.data.ItemContract;
 import com.example.android.items.data.ItemContract.ItemEntry;
+
+import java.io.FileDescriptor;
+import java.io.IOException;
+
+import static com.example.android.items.data.ItemProvider.LOG_TAG;
+//import static android.R.id.message;
 
 /**
  * Allows user to create a new item or edit an existing one.
@@ -52,6 +67,11 @@ public class EditorActivity extends AppCompatActivity implements
      * Identifier for the item data loader
      */
     private static final int EXISTING_ITEM_LOADER = 0;
+
+    /**
+     * Identifier for the pick image request
+     */
+    private static final int PICK_IMAGE_REQUEST = 0;
 
     /**
      * Content URI for the existing item (null if it's a new item)
@@ -84,6 +104,11 @@ public class EditorActivity extends AppCompatActivity implements
     private EditText mImageEditText;
 
     /**
+     * EditText field to enter the item's image
+     */
+    private ImageView mImageView;
+
+    /**
      * EditText field to enter the item's manufacturer
      */
     private EditText mManufacturerEditText;
@@ -106,7 +131,7 @@ public class EditorActivity extends AppCompatActivity implements
     private int mQuantity;
 
     /**
-     * Boolean flag that keeps track of whether the pet has been edited (true) or not (false)
+     * Boolean flag that keeps track of whether the item has been edited (true) or not (false)
      */
     private boolean mItemHasChanged = false;
 
@@ -153,6 +178,7 @@ public class EditorActivity extends AppCompatActivity implements
         mPriceEditText = (EditText) findViewById(R.id.edit_item_price);
         mManufacturerEditText = (EditText) findViewById(R.id.edit_item_manufacturer);
         mImageEditText = (EditText) findViewById(R.id.edit_item_image);
+        mImageView = (ImageView) findViewById(R.id.image);
         // Setup OnTouchListeners on all the input fields, so we can determine if the user
         // has touched or modified them. This will let us know if there are unsaved changes
         // or not, if the user tries to leave the editor without saving.
@@ -163,7 +189,27 @@ public class EditorActivity extends AppCompatActivity implements
         mManufacturerEditText.setOnTouchListener(mTouchListener);
         mImageEditText.setOnTouchListener(mTouchListener);
         mStatusSpinner.setOnTouchListener(mTouchListener);
+        mImageView.setOnTouchListener(mTouchListener);
         setupSpinner();
+
+        //Implement the Select Image Button
+        //Set the onClickListener
+        Button imageButton = (Button) findViewById(R.id.select_image_button);
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent;
+
+                if (Build.VERSION.SDK_INT < 19) {
+                    intent = new Intent(Intent.ACTION_GET_CONTENT);
+                } else {
+                    intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+                    intent.addCategory(Intent.CATEGORY_OPENABLE);
+                }
+
+                intent.setType("image/*");
+                startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+        }});
 
         //Implement the Sale Button
         //Set the onClickListener
@@ -211,11 +257,98 @@ public class EditorActivity extends AppCompatActivity implements
 
         });
 
+        //Implement the Order Product Button
+        //Set the onClickListener
+        Button orderButton = (Button) findViewById(R.id.orderButtonEditor);
+        orderButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Formulate the current record data into an email message to send to supplier
+                //including product name, description and the name of the supplier
+
+                //Get the name for use in the subject line and the subject text
+                Editable nameEditable = mNameEditText.getText();
+                String name = nameEditable.toString();
+
+                //Get the description for use in the body of the email
+                Editable descriptionEditable = mDescriptionEditText.getText();
+                String description = descriptionEditable.toString();
+
+                //Get the manufacturer for use in the body of the email
+                Editable manufacturerEditable = mManufacturerEditText.getText();
+                String manufacturer = manufacturerEditable.toString();
+
+                String emailMessage = ("Please order the following product using the standard order amount: \n" +
+
+                        "\n" + "Name: " + name +
+                        "\n" + "Description: " + description +
+                        "\n" + "Manufacturer: " + manufacturer);
+
+                //Call the intent that launches the mail client to send the email including the subject and body
+                Intent intent = new Intent(Intent.ACTION_SENDTO);
+                intent.setData(Uri.parse("mailto:"));
+                intent.putExtra(Intent.EXTRA_SUBJECT,
+                        getString(R.string.email_subject, name));
+                intent.putExtra(Intent.EXTRA_TEXT, emailMessage);
+
+                if (intent.resolveActivity(getPackageManager()) != null) {
+                    startActivity(intent);
+                } }
+        });
+    }
+
+    /**
+     * Select an image code
+     */
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent resultData) {
+        // The ACTION_OPEN_DOCUMENT intent was sent with the request code READ_REQUEST_CODE.
+        // If the request code seen here doesn't match, it's the response to some other intent,
+        // and the below code shouldn't run at all.
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK) {
+            // The document selected by the user won't be returned in the intent.
+            // Instead, a URI to that document will be contained in the return intent
+            // provided to this method as a parameter.  Pull that uri using "resultData.getData()"
+
+            if (resultData != null) {
+                mCurrentItemUri = resultData.getData();
+                Log.i(LOG_TAG, "Uri: " + mCurrentItemUri.toString());
+                mImageEditText.setText(mCurrentItemUri.toString());
+                mImageView.setImageBitmap(getBitmapFromUri(mCurrentItemUri));
+            }
+        }
+    }
+
+    private Bitmap getBitmapFromUri(Uri uri) {
+        ParcelFileDescriptor parcelFileDescriptor = null;
+        try {
+            parcelFileDescriptor =
+                    getContentResolver().openFileDescriptor(uri, "r");
+            FileDescriptor fileDescriptor = parcelFileDescriptor.getFileDescriptor();
+            Bitmap image = BitmapFactory.decodeFileDescriptor(fileDescriptor);
+            parcelFileDescriptor.close();
+            return image;
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "Failed to load image.", e);
+            return null;
+        } finally {
+            try {
+                if (parcelFileDescriptor != null) {
+                    parcelFileDescriptor.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                Log.e(LOG_TAG, "Error closing ParcelFile Descriptor");
+            }
+        }
     }
 
     /**
      * Setup the dropdown spinner that allows the user to select the status of the item.
      */
+
     private void setupSpinner() {
         // Create adapter for spinner. The list options are from the String array it will use
         // the spinner will use the default layout
