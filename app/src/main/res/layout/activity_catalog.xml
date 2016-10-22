@@ -10,7 +10,9 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
+
 <!-- Layout for the list of items -->
+
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
@@ -24,6 +26,7 @@
         android:layout_height="match_parent"/>
 
     <!-- Empty view for the list -->
+
     <RelativeLayout
         android:id="@+id/empty_view"
         android:layout_width="wrap_content"

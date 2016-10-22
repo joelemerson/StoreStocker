@@ -10,7 +10,9 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
+
 <!-- Layout for a single list item in the list of items -->
+
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
@@ -22,7 +24,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif-medium"
-        android:text="Name"
+        android:text="@string/name_list"
         android:textAppearance="?android:textAppearanceMedium"
         android:textColor="#2B3D4D"/>
 
@@ -32,7 +34,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/name"
         android:fontFamily="sans-serif"
-        android:text="Description"
+        android:text="@string/description_list"
         android:textAppearance="?android:textAppearanceSmall"
         android:textColor="#AEB6BD"/>
 
@@ -42,7 +44,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:fontFamily="sans-serif"
-        android:text="4.00"
+        android:text="@string/_4_00_value"
         android:textAppearance="?android:textAppearanceSmall"
         android:textColor="#AEB6BD"/>
 
@@ -63,7 +65,7 @@
         android:layout_alignParentRight="true"
         android:layout_below="@id/price"
         android:fontFamily="sans-serif"
-        android:text="100"
+        android:text="@string/_100_value"
         android:textAppearance="?android:textAppearanceSmall"
         android:textColor="#AEB6BD"/>
 
@@ -71,20 +73,20 @@
         android:id="@+id/quantity_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toLeftOf="@id/quantity"
         android:layout_below="@id/price"
+        android:layout_toLeftOf="@id/quantity"
         android:fontFamily="sans-serif"
-        android:text="Quantity: "
+        android:text="@string/quantity_list"
         android:textAppearance="?android:textAppearanceSmall"
         android:textColor="#AEB6BD"/>
 
     <Button
-        android:text="Sale"
+        android:id="@+id/salebutton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/quantity"
-        android:layout_margin= "8dp"
+        android:layout_margin="8dp"
         android:focusable="false"
-        android:id="@+id/salebutton"/>
+        android:text="@string/sale_button_list"/>
 
 </RelativeLayout>

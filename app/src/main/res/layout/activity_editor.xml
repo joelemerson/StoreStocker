@@ -10,7 +10,9 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
+
 <!-- Layout for the editor -->
+
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
@@ -19,23 +21,26 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="@dimen/activity_margin"
         tools:context=".EditorActivity">
 
         <!-- Overview category -->
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
             <!-- Label -->
+
             <TextView
                 style="@style/CategoryStyle"
                 android:text="@string/category_overview"/>
 
             <!-- Input fields -->
+
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -44,6 +49,7 @@
                 android:paddingLeft="4dp">
 
                 <!-- Name field -->
+
                 <EditText
                     android:id="@+id/edit_item_name"
                     style="@style/EditorFieldStyle"
@@ -51,15 +57,19 @@
                     android:inputType="textCapWords"/>
 
                 <!-- Description field -->
+
                 <EditText
                     android:id="@+id/edit_item_description"
                     style="@style/EditorFieldStyle"
                     android:hint="@string/hint_item_description"
                     android:inputType="textCapWords"/>
+
             </LinearLayout>
+
         </LinearLayout>
 
         <!-- Status category -->
+
         <LinearLayout
             android:id="@+id/container_status"
             android:layout_width="match_parent"
@@ -72,6 +82,7 @@
                 android:text="@string/category_status"/>
 
             <!-- Input field -->
+
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -79,16 +90,20 @@
                 android:orientation="vertical">
 
                 <!-- Status drop-down spinner -->
+
                 <Spinner
                     android:id="@+id/spinner_status"
                     android:layout_width="wrap_content"
                     android:layout_height="48dp"
                     android:paddingRight="16dp"
                     android:spinnerMode="dropdown"/>
+
             </LinearLayout>
+
         </LinearLayout>
 
         <!-- Price category -->
+
         <LinearLayout
             android:id="@+id/container_price"
             android:layout_width="match_parent"
@@ -96,11 +111,13 @@
             android:orientation="horizontal">
 
             <!-- Label -->
+
             <TextView
                 style="@style/CategoryStyle"
-                android:text="Price"/>
+                android:text="@string/price_label"/>
 
             <!-- Input fields -->
+
             <RelativeLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -108,6 +125,7 @@
                 android:paddingLeft="4dp">
 
                 <!-- Price field -->
+
                 <EditText
                     android:id="@+id/edit_item_price"
                     style="@style/EditorFieldStyle"
@@ -119,6 +137,7 @@
         </LinearLayout>
 
         <!-- Quantity category -->
+
         <LinearLayout
             android:id="@+id/container_quantity"
             android:layout_width="match_parent"
@@ -126,11 +145,13 @@
             android:orientation="horizontal">
 
             <!-- Label -->
+
             <TextView
                 style="@style/CategoryStyle"
                 android:text="@string/category_quantity"/>
 
             <!-- Input fields -->
+
             <RelativeLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -138,6 +159,7 @@
                 android:paddingLeft="4dp">
 
                 <!-- Quantity field -->
+
                 <EditText
                     android:id="@+id/edit_item_quantity"
                     style="@style/EditorFieldStyle"
@@ -145,9 +167,10 @@
                     android:inputType="number"/>
 
             </RelativeLayout>
+
         </LinearLayout>
 
-        !-- Manufacturer category -->
+        <!-- Manufacturer category -->
 
         <LinearLayout
             android:id="@+id/container_manufacturer"
@@ -156,11 +179,13 @@
             android:orientation="horizontal">
 
             <!-- Label -->
+
             <TextView
                 style="@style/CategoryStyle"
                 android:text="@string/manufacturer_label"/>
 
             <!-- Input fields -->
+
             <RelativeLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -168,6 +193,7 @@
                 android:paddingLeft="4dp">
 
                 <!-- Image field -->
+
                 <EditText
                     android:id="@+id/edit_item_manufacturer"
                     style="@style/EditorFieldStyle"
@@ -178,7 +204,7 @@
 
         </LinearLayout>
 
-        !-- Image category -->
+        <!-- Image category -->
 
         <LinearLayout
             android:id="@+id/container_image"
@@ -187,11 +213,13 @@
             android:orientation="horizontal">
 
             <!-- Label -->
+
             <TextView
                 style="@style/CategoryStyle"
-                android:text="@string/image_label"/>
+                android:text="@string/image_label"
+                android:visibility="invisible"/>
 
-            !-- Image field -->
+            <!-- Image field -->
 
             <RelativeLayout
                 android:layout_width="0dp"
@@ -203,7 +231,9 @@
                     android:id="@+id/edit_item_image"
                     style="@style/EditorFieldStyle"
                     android:hint="@string/image_label"
-                    android:inputType="text"/>
+                    android:inputType="text"
+                    android:visibility="invisible"/>
+
             </RelativeLayout>
 
         </LinearLayout>
@@ -217,7 +247,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="12dp"
-                android:text="Select Image"/>
+                android:text="@string/select_image"/>
 
             <ImageView
                 android:id="@+id/image"
@@ -225,13 +255,11 @@
                 android:layout_height="150dp"
                 android:layout_marginBottom="12dp"
                 android:layout_marginTop="12dp"
-                android:layout_toEndOf="@+id/select_image"
-                android:layout_toRightOf="@+id/select_image"
                 android:scaleType="centerCrop"/>
 
         </LinearLayout>
 
-        !-- Sales and Order Buttons category -->
+        <!-- Sales and Order Buttons category -->
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -243,20 +271,22 @@
                 android:id="@+id/saleButtonEditor"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Sale"/>
+                android:text="@string/sale"/>
 
             <Button
                 android:id="@+id/receiveButtonEditor"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Receive Product"/>
+                android:text="@string/receive_product"/>
 
             <Button
                 android:id="@+id/orderButtonEditor"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Order"/>
+                android:text="@string/order"/>
 
         </LinearLayout>
+
     </LinearLayout>
+
 </ScrollView>

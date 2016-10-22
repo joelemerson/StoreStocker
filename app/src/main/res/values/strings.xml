@@ -113,4 +113,15 @@
     <string name="email_subject">Product Order: <xliff:g>%s</xliff:g></string>
 
     <string name="email_subject_text">"Order Product: "</string>
+    <string name="price_label">Price</string>
+    <string name="select_image">Select Image</string>
+    <string name="sale">Sale</string>
+    <string name="receive_product">Receive Product</string>
+    <string name="order">Order</string>
+    <string name="name_list">Name</string>
+    <string name="description_list">Description</string>
+    <string name="_4_00_value">4.00</string>
+    <string name="_100_value">100</string>
+    <string name="quantity_list">Quantity:</string>
+    <string name="sale_button_list">Sale</string>
 </resources>
